@@ -11,7 +11,7 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      "AMALINUX" : "ami-afd15ed0" # AMALINUX SEP 2016
+      "AMALINUX" : "ami-c481fad3" # AMALINUX SEP 2016
 
   InstanceSize:
     SMALL:
