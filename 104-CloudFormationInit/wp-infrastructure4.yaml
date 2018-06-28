@@ -7,19 +7,7 @@ Parameters:
       - MEDIUM
       - LARGE
     Description: Select Environment Size (S,M,L)
-  DatabaseName:
-    Type: String
-    Default: wordpress
-  DatabaseUser:
-    Type: String
-    Default: wordpress
-  DatabasePassword:
-    Type: String
-    Default: w0rdpr355
-    NoEcho: true
-  TestString:
-    Type: String
-    Default: test9
+
 Mappings:
   RegionMap:
     us-east-1:
@@ -60,37 +48,29 @@ Mappings:
     LARGE:
       "EC2" : "t2.medium"
       "DB" : "db.t2.medium"
+      
 Resources:
-  DB:
-    Type: "AWS::RDS::DBInstance"
-    Properties:
-      AllocatedStorage: 5
-      StorageType: gp2
-      DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB] # Dynamic mapping + Pseudo Parameter
-      DBName: !Ref DatabaseName
-      Engine: MySQL
-      MasterUsername: !Ref DatabaseUser
-      MasterUserPassword: !Ref DatabasePassword
   EC2:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMALINUX] # Dynamic mapping + Pseudo Parameter
       InstanceType: !FindInMap [InstanceSize, !Ref EnvironmentSize, EC2]
-      KeyName: AdvancedCFN
+      # KeyName: AdvancedCFN
       UserData:
         "Fn::Base64":
           !Sub |
             #!/bin/bash
             yum update -y aws-cfn-bootstrap # good practice - always do this.
-            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2 --configsets wordpress --region ${AWS::Region}
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2 --configsets dovecot --region ${AWS::Region}
             yum -y update
     Metadata:
       AWS::CloudFormation::Init:
         configSets:
-          wordpress:
+          dovecot:
             - "configure_cfn"
-            - "install_wordpress"
-            - "config_wordpress"
+            - "install_dovecot"
+            - "config_dovecot"
+            
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -112,8 +92,6 @@ Resources:
               mode: "000400"
               owner: root
               group: root
-            /var/www/html/index2.html:
-              content: !Ref TestString
           services:
             sysvinit:
               cfn-hup:
@@ -122,41 +100,33 @@ Resources:
                 files:
                   - "/etc/cfn/cfn-hup.conf"
                   - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
-        install_wordpress:
+                  
+        install_dovecot:
           packages:
             yum:
-              httpd: []
-              php: []
-              mysql: []
-              php-mysql: []
-          sources:
-            /var/www/html: "http://wordpress.org/latest.tar.gz"
+              dovecot: []
+              mailx: []
+              telnet: []
+              mutt: []
           services:
             sysvinit:
-              httpd:
+              dovecot:
                 enabled: "true"
                 ensureRunning: "true"
-        config_wordpress:
+                
+        config_dovecot:
           commands:
-            01_clone_config:
-              cwd: "/var/www/html/wordpress"
-              test: "test ! -e /var/www/html/wordpress/wp-config.php"
-              command: "cp wp-config-sample.php wp-config.php"
-            02_inject_dbhost:
-              cwd: "/var/www/html/wordpress"
+            01_add_test_user:
               command: !Sub |
-                sed -i 's/localhost/${DB.Endpoint.Address}/g' wp-config.php
-            03_inject_dbname:
-              cwd: "/var/www/html/wordpress"
+                useradd demo
+                echo "demo:demo1" | chpasswd
+                usermod -aG mail demo
+            02_auth_config:
+              cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i 's/database_name_here/${DatabaseName}/g' wp-config.php
-            04_inject_dbuser:
-              cwd: "/var/www/html/wordpress"
+                sed -i '$adisable_plaintext_auth = no' 10-auth.conf
+            03_mail_config:
+              cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i 's/username_here/${DatabaseUser}/g' wp-config.php
-            05_inject_dbpassword:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/password_here/${DatabasePassword}/g' wp-config.php
-  S3:
-    Type: "AWS::S3::Bucket"
+                sed -i "\$amail_location = mbox:~/mail:INBOX=$mnt_efs/mail/%u" 10-mail.conf
+
