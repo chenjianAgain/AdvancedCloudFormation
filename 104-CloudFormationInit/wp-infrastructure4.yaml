@@ -61,16 +61,6 @@ Mappings:
       "EC2" : "t2.medium"
       "DB" : "db.t2.medium"
 Resources:
-  DB:
-    Type: "AWS::RDS::DBInstance"
-    Properties:
-      AllocatedStorage: 5
-      StorageType: gp2
-      DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB] # Dynamic mapping + Pseudo Parameter
-      DBName: !Ref DatabaseName
-      Engine: MySQL
-      MasterUsername: !Ref DatabaseUser
-      MasterUserPassword: !Ref DatabasePassword
   EC2:
     Type: "AWS::EC2::Instance"
     Properties:
@@ -90,7 +80,7 @@ Resources:
           wordpress:
             - "configure_cfn"
             - "install_wordpress"
-            - "config_wordpress"
+           # - "config_wordpress"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -158,5 +148,4 @@ Resources:
               cwd: "/var/www/html/wordpress"
               command: !Sub |
                 sed -i 's/password_here/${DatabasePassword}/g' wp-config.php
-  S3:
-    Type: "AWS::S3::Bucket"
+
