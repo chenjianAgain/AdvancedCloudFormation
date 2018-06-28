@@ -126,26 +126,5 @@ Resources:
               httpd:
                 enabled: "true"
                 ensureRunning: "true"
-        config_wordpress:
-          commands:
-            01_clone_config:
-              cwd: "/var/www/html/wordpress"
-              test: "test ! -e /var/www/html/wordpress/wp-config.php"
-              command: "cp wp-config-sample.php wp-config.php"
-            02_inject_dbhost:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/localhost/${DB.Endpoint.Address}/g' wp-config.php
-            03_inject_dbname:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/database_name_here/${DatabaseName}/g' wp-config.php
-            04_inject_dbuser:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/username_here/${DatabaseUser}/g' wp-config.php
-            05_inject_dbpassword:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/password_here/${DatabasePassword}/g' wp-config.php
+
 
