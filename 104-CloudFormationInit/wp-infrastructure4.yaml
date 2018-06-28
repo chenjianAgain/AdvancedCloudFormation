@@ -68,7 +68,7 @@ Resources:
               owner: root
               group: root
             /var/www/html/index2.html:
-              content: !Ref TestString
+              content: "TestString"
           services:
             sysvinit:
               cfn-hup:
