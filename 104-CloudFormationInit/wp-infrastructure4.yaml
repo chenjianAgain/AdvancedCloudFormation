@@ -130,8 +130,7 @@ Resources:
             03_mail_config:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                mnt_efs=/mnt/efs
-                mkdir -p $mnt_efs
-                mount -t efs fs-efbb24a7:/ $mnt_efs
-                sed -i "\$amail_location = mbox:~/mail:INBOX=$mnt_efs/mail/%u" 10-mail.conf
+                mkdir -p /mnt/efs
+                mount -t efs fs-efbb24a7:/ /mnt/efs
+                sed -i "\$amail_location = mbox:~/mail:INBOX=/mnt/efs/mail/%u" 10-mail.conf
 
