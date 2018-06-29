@@ -120,9 +120,10 @@ Resources:
           commands:
             01_add_test_user:
               command: 
-                - !Sub |
-                  useradd demo
-                - !Sub |
-                  echo "demo:demo1" | chpasswd
-                - !Sub |
-                  usermod -aG mail demo
+                useradd demo
+            02_add_password:
+              command: 
+                echo "demo:demo1" | chpasswd
+            03_add_group:
+              command: 
+                usermod -aG mail demo
