@@ -104,6 +104,8 @@ Resources:
                   - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
                   
         install_dovecot:
+                
+        config_dovecot:
           packages:
             yum:
               dovecot: []
@@ -115,8 +117,6 @@ Resources:
               dovecot:
                 enabled: "true"
                 ensureRunning: "true"
-                
-        config_dovecot:
           commands:
             01_add_test_user:
               command: "useradd demo"
