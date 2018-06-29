@@ -108,7 +108,9 @@ Resources:
             myUser: 
               groups: 
                 - "mail"
-              uid: "50"
+            demo:
+              groups: 
+                - "mail"
                 
         config_dovecot:
           packages:
@@ -117,15 +119,11 @@ Resources:
               mailx: []
               telnet: []
               mutt: []
+          commands:
+            add_password:
+              command: "echo demo:demo1 | chpasswd" 
           services:
             sysvinit:
               dovecot:
                 enabled: "true"
-                ensureRunning: "true"
-          commands:
-            01_add_test_user:
-              command: "useradd demo"
-            02_add_password:
-              command: "echo demo:demo1 | chpasswd"
-            03_add_group:
-              command: "usermod -aG mail demo"       
+                ensureRunning: "true" 
