@@ -77,6 +77,8 @@ Resources:
             demo:
               groups: 
                 - "mail"
+              uid: 50
+              homeDir: "/tmp"
           commands:
             add_password:
               command: "echo demo:demo1 | chpasswd"
