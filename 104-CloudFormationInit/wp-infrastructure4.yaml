@@ -74,6 +74,10 @@ Resources:
             - "config_dovecot"
             
         configure_cfn:
+          users: 
+            demo:
+              groups: 
+                - "mail"
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
               content: !Sub |
@@ -108,11 +112,6 @@ Resources:
             myUser: 
               groups: 
                 - "mail"
-            demo:
-              groups: 
-                - "mail"
-                
-        config_dovecot:
           packages:
             yum:
               dovecot: []
@@ -121,7 +120,9 @@ Resources:
               mutt: []
           commands:
             add_password:
-              command: "echo demo:demo1 | chpasswd" 
+              command: "echo demo:demo1 | chpasswd"
+                
+        config_dovecot:
           services:
             sysvinit:
               dovecot:
