@@ -119,18 +119,10 @@ Resources:
         config_dovecot:
           commands:
             01_add_test_user:
-              command: !Sub |
-                useradd demo
-                echo "demo:demo1" | chpasswd
-                usermod -aG mail demo
-            02_auth_config:
-              cwd: "/etc/dovecot/conf.d"
-              command: !Sub |
-                sed -i '$adisable_plaintext_auth = no' 10-auth.conf
-            03_mail_config:
-              cwd: "/etc/dovecot/conf.d"
-              command: !Sub |
-                mkdir -p /mnt/efs
-                mount -t efs fs-efbb24a7:/ /mnt/efs
-                sed -i "\$amail_location = mbox:~/mail:INBOX=/mnt/efs/mail/%u" 10-mail.conf
-
+              command: 
+                - !Sub |
+                  useradd demo
+                - !Sub |
+                  echo "demo:demo1" | chpasswd
+                - !Sub |
+                  usermod -aG mail demo
