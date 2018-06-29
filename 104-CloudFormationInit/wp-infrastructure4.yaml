@@ -71,7 +71,6 @@ Resources:
           dovecot:
             - "configure_cfn"
             - "install_dovecot"
-            - "config_dovecot"
             
         configure_cfn:
           users: 
@@ -117,8 +116,11 @@ Resources:
               mailx: []
               telnet: []
               mutt: []
-                
-        config_dovecot:
+          commands:
+            01_auth:
+              cwd: "/etc/dovecot/conf.d"
+              command: 
+                sed -i '$adisable_plaintext_auth = no' 10-auth.conf
           services:
             sysvinit:
               dovecot:
