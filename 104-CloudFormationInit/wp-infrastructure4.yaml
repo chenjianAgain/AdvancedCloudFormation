@@ -119,7 +119,7 @@ Resources:
           commands:
             01_auth:
               cwd: "/etc/dovecot/conf.d"
-              command: 
+              command: !Sub |
                 sed -i '$adisable_plaintext_auth = no' 10-auth.conf
           services:
             sysvinit:
