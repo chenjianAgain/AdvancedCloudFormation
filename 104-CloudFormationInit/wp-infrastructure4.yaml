@@ -77,7 +77,7 @@ Resources:
             demo:
               groups: 
                 - "mail"
-              uid: 50
+              uid: "50"
               homeDir: "/tmp"
           commands:
             add_password:
@@ -112,6 +112,12 @@ Resources:
                   - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
                   
         install_dovecot:
+          users: 
+            myuser:
+              groups: 
+                - "mail"
+              uid: "51"
+              homeDir: "/tmp"
           packages:
             yum:
               dovecot: []
