@@ -71,7 +71,7 @@ Resources:
           dovecot:
             - "configure_cfn"
             - "install_dovecot"
-            - "config_dovecot"
+          #  - "config_dovecot"
             
         configure_cfn:
           files:
