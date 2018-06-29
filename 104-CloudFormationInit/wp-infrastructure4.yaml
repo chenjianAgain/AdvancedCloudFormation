@@ -116,7 +116,7 @@ Resources:
                 enabled: "true"
                 ensureRunning: "true"
                 
-        config_dovecot
+        config_dovecot:
           commands:
             01_add_test_user:
               command: "useradd demo"
