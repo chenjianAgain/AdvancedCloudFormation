@@ -117,7 +117,7 @@ Resources:
               telnet: []
               mutt: []
           commands:
-            01_auth:
+            01_auth_allow_plaintext:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 sed -i '$adisable_plaintext_auth = no' 10-auth.conf
