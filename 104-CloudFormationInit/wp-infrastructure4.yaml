@@ -71,7 +71,7 @@ Resources:
           dovecot:
             - "configure_cfn"
             - "install_dovecot"
-          #  - "config_dovecot"
+            - "config_dovecot"
             
         configure_cfn:
           files:
@@ -115,6 +115,8 @@ Resources:
               dovecot:
                 enabled: "true"
                 ensureRunning: "true"
+                
+        config_dovecot
           commands:
             01_add_test_user:
               command: "useradd demo"
