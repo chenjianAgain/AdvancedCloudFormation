@@ -104,8 +104,11 @@ Resources:
                   - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
                   
         install_dovecot:
-            01_add_test_user:
-              command: "echo hello"
+          users: 
+            myUser: 
+              groups: 
+                - "mail"
+              uid: "50"
                 
         config_dovecot:
           packages:
