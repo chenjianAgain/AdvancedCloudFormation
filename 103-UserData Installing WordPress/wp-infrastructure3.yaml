@@ -11,7 +11,8 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      "AMALINUX" : "ami-b70554c8" # AMALINUX July 2018
+     # "AMALINUX" : "ami-b70554c8" # AMALINUX July 2018 . ami-6871a115
+      "AMALINUX" : "ami-6871a115" # Redhat
   InstanceSize:
     SMALL:
       "EC2" : "t2.micro"
