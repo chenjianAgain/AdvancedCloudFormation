@@ -53,9 +53,9 @@ Resources:
   myDNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneName: !Ref 'HostedZoneResource'
+      HostedZoneName: josephaws.com.
       Comment: DNS name for my instance.
-      Name: !Join ['', [!Ref 'EC2', ., !Ref 'AWS::Region', ., !Ref 'HostedZone', .]]
+      Name: autoRoute53
       Type: A
       TTL: '900'
       ResourceRecords:
