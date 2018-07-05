@@ -57,7 +57,7 @@ Resources:
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMALINUX] # Dynamic mapping + Pseudo Parameter
       InstanceType: !FindInMap [InstanceSize, !Ref EnvironmentSize, EC2]
-      # KeyName: Joseph-demo
+      KeyName: Joseph-demo
       SecurityGroups: 
         - !Ref Ec2SecurityGroup
       UserData:
