@@ -49,14 +49,3 @@ Resources:
       ResourceSignal:
         Count: "1"
         Timeout: PT15M
-
-  myDNSRecord:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneName: josephaws.com.
-      Comment: DNS name for my instance.
-      Name: autodns.josephaws.com.
-      Type: A
-      TTL: '900'
-      ResourceRecords:
-      - !GetAtt EC2.PublicIp
