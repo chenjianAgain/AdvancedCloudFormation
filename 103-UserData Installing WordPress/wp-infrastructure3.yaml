@@ -55,7 +55,7 @@ Resources:
     Properties:
       HostedZoneName: josephaws.com.
       Comment: DNS name for my instance.
-      Name: autodns
+      Name: autodns.josephaws.com.
       Type: A
       TTL: '900'
       ResourceRecords:
