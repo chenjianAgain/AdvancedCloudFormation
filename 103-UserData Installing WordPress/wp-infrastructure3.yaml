@@ -65,5 +65,9 @@ Resources:
             chkconfig httpd on
             echo "Hello World!" > /var/www/html/index.html
             service httpd start
-
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2 --region ${AWS::Region}
+    CreationPolicy:
+      ResourceSignal:
+        Count: "1"
+        Timeout: PT15M
 
