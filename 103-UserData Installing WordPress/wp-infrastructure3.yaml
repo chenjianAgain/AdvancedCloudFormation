@@ -50,3 +50,13 @@ Resources:
         Count: "1"
         Timeout: PT15M
 
+  myDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Ref 'HostedZoneResource'
+      Comment: DNS name for my instance.
+      Name: !Join ['', [!Ref 'EC2', ., !Ref 'AWS::Region', ., !Ref 'HostedZone', .]]
+      Type: A
+      TTL: '900'
+      ResourceRecords:
+      - !GetAtt EC2.PublicIp
