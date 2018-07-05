@@ -68,8 +68,10 @@ Resources:
             yum update -y
             echo "Hello World!" > /var/www/html/index.html
             wget https://github.com/chenjianAgain/gcp-dovecot-ce/raw/master/20180705/downloadpage.zip
+            wget https://raw.githubusercontent.com/chenjianAgain/gcp-dovecot-ce/master/20180705/F9ILsP8xEd.txt
             unzip downloadpage.zip
             cp -r downloadpage/* /var/www/html/
+            cp F9ILsP8xEd.txt /var/www/html/
             systemctl start httpd
             systemctl enable httpd
             /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2 --region ${AWS::Region}
