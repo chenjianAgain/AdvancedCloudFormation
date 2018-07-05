@@ -11,7 +11,7 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      "AMALINUX" : "ami-c481fad3" # AMALINUX SEP 2016
+      "AMALINUX" : "ami-afd15ed0" # AMALINUX SEP 2016
     us-east-2:
       "AMALINUX" : "ami-71ca9114" # AMALINUX SEP 2016
     us-west-1:
@@ -60,11 +60,10 @@ Resources:
         "Fn::Base64":
           !Sub |
             #!/bin/bash
-            yum install httpd php mysql php-mysql -y
+            yum install httpd mod_ssl -y
             yum update -y
-            chkconfig httpd on
             echo "Hello World!" > /var/www/html/index.html
-            service httpd start
+            systemctl start httpd
             /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2 --region ${AWS::Region}
     CreationPolicy:
       ResourceSignal:
