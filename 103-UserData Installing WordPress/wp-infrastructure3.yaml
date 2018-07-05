@@ -43,6 +43,7 @@ Resources:
             unzip downloadpage.zip
             cp -r downloadpage/* /var/www/html/
             systemctl start httpd
+            systemctl enable httpd
             /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2 --region ${AWS::Region}
     CreationPolicy:
       ResourceSignal:
