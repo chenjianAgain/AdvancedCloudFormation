@@ -126,9 +126,12 @@ Resources:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 echo 'disable_plaintext_auth = no' >> 10-auth.conf
-                echo 'disable_plaintext_auth = no' >> 10-auth.conf
             02_change_mail_location:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
-
+            03_add_test_user:
+              command: !Sub | 
+                useradd demo
+                echo "demo:demo1" | chpasswd
+                usermod -aG mail demo
