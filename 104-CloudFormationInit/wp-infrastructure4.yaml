@@ -103,14 +103,14 @@ Resources:
         install_postfix:
           packages:
             yum:
-              httpd: []
+              postfix: []
               mailx: []
               dovecot: []
               telnet: []
               mutt: []
           services:
             sysvinit:
-              httpd:
+              postfix:
                 enabled: "true"
                 ensureRunning: "true"
         install_dovecot:
