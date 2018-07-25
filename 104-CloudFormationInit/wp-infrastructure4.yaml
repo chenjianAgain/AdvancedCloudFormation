@@ -93,8 +93,6 @@ Resources:
               mode: "000400"
               owner: root
               group: root
-            /var/www/html/index2.html:
-              content: !Ref TestString
           services:
             sysvinit:
               cfn-hup:
