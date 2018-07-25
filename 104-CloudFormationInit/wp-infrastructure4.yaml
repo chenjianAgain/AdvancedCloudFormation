@@ -112,10 +112,7 @@ Resources:
             /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
             sysvinit:
-              - httpd:
-                  enabled: "true"
-                  ensureRunning: "true"
-              - dovecot:
+              dovecot:
                   enabled: "true"
                   ensureRunning: "true"
         config_wordpress:
