@@ -115,7 +115,9 @@ Resources:
               httpd:
                 enabled: "true"
                 ensureRunning: "true"
-              
+              dovecot:
+                enabled: "true"
+                ensureRunning: "true"
         config_wordpress:
           commands:
             01_clone_config:
