@@ -100,7 +100,17 @@ Resources:
                 ensureRunning: "true"
                 files:
                   - "/etc/cfn/cfn-hup.conf"
-                  - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+                  - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"        
+        config_aa:
+          commands:
+            01_clone_config:
+              cwd: "/etc/dovecot/conf.d"
+              test: "test ! -e /etc/dovecot/conf.d/10-auth.conf"
+              command: "echo 'disable_plaintext_auth = no' >> 10-auth.conf"
+            02_change_mailbox_location:
+              cwd: "/etc/dovecot/conf.d"
+              command: !Sub |
+                echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
         install_wordpress:
           packages:
             yum:
@@ -117,14 +127,4 @@ Resources:
               postfix:
                 enabled: "true"
                 ensureRunning: "true"
-        
-        config_aa:
-          commands:
-            01_clone_config:
-              cwd: "/etc/dovecot/conf.d"
-              test: "test ! -e /etc/dovecot/conf.d/10-auth.conf"
-              command: "echo 'disable_plaintext_auth = no' >> 10-auth.conf"
-            02_change_mailbox_location:
-              cwd: "/etc/dovecot/conf.d"
-              command: !Sub |
-                echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
+
