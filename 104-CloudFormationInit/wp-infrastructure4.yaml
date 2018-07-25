@@ -104,7 +104,7 @@ Resources:
           packages:
             yum:
               httpd: []
-              mail: []
+              mailx: []
               dovecot: []
               telnet: []
               mutt: []
@@ -112,10 +112,10 @@ Resources:
             /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
             sysvinit:
-              httpd:
+              - httpd:
                 enabled: "true"
                 ensureRunning: "true"
-              dovecot:
+              - dovecot:
                 enabled: "true"
                 ensureRunning: "true"
         config_wordpress:
