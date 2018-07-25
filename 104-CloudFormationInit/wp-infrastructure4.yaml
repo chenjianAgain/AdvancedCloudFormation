@@ -112,6 +112,16 @@ Resources:
               postfix:
                 enabled: "true"
                 ensureRunning: "true"
+          commands:
+            01_add_test_user:
+              command: !Sub | 
+                useradd demo
+                echo "demo:demo1" | chpasswd
+                usermod -aG mail demo
+            02_add_test_email:
+              command: !Sub | 
+                echo "test from cfn" | mail -s "test from cfn" demo@localhost.
+            
         install_dovecot:
           packages:
             yum:
@@ -130,8 +140,3 @@ Resources:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
-            03_add_test_user:
-              command: !Sub | 
-                useradd demo
-                echo "demo:demo1" | chpasswd
-                usermod -aG mail demo
