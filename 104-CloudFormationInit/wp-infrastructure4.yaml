@@ -122,8 +122,8 @@ Resources:
             01_allow_plaintext_auth:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i '$adisable_plaintext_auth = no' 10-auth.conf
+                'disable_plaintext_auth = no' >> 10-auth.conf
             02_change_mailbox_location:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i '$amail_location = mbox:~/mail:INBOX=/var/mail/%u' 10-mail.conf
+                'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
