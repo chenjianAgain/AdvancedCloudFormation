@@ -113,8 +113,8 @@ Resources:
           services:
             sysvinit:
               dovecot:
-                  enabled: "true"
-                  ensureRunning: "true"
+                enabled: "true"
+                ensureRunning: "true"
         config_wordpress:
           commands:
             01_clone_config:
