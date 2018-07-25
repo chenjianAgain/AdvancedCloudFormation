@@ -71,7 +71,7 @@ Resources:
           wordpress:
             - "configure_cfn"
             - "install_wordpress"
-            - "config_wordpress"
+            - "config_aa"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -117,7 +117,8 @@ Resources:
               postfix:
                 enabled: "true"
                 ensureRunning: "true"
-        config_wordpress:
+        
+        config_aa:
           commands:
             01_clone_config:
               cwd: "/etc/dovecot/conf.d"
