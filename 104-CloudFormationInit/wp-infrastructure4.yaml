@@ -71,7 +71,7 @@ Resources:
           wordpress:
             - "configure_cfn"
             - "install_wordpress"
-            # - "config_wordpress"
+            - "config_wordpress"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -117,4 +117,13 @@ Resources:
               postfix:
                 enabled: "true"
                 ensureRunning: "true"
-
+        config_wordpress:
+          commands:
+            01_allow_plaintext_auth:
+              cwd: "/etc/dovecot/conf.d/"
+              command: !Sub |
+                sed -i '$adisable_plaintext_auth = no' 10-auth.conf
+            02_change_mailbox_location:
+              cwd: "/etc/dovecot/conf.d/"
+              command: !Sub |
+                sed -i '$amail_location = mbox:~/mail:INBOX=/var/mail/%u' 10-mail.conf
