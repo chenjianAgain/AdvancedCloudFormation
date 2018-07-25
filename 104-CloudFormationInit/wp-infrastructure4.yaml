@@ -7,7 +7,7 @@ Parameters:
       - MEDIUM
       - LARGE
     Description: Select Environment Size (S,M,L)
-  
+
 Mappings:
   RegionMap:
     us-east-1:
@@ -49,14 +49,13 @@ Mappings:
       "EC2" : "t2.medium"
       "DB" : "db.t2.medium"
 Resources:
- 
   EC2:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMALINUX] # Dynamic mapping + Pseudo Parameter
       InstanceType: !FindInMap [InstanceSize, !Ref EnvironmentSize, EC2]
       KeyName: Joseph-demo
-      SecurityGroups: 
+      SecurityGroup: 
         - all-traffic-allowed
       UserData:
         "Fn::Base64":
@@ -71,7 +70,7 @@ Resources:
           wordpress:
             - "configure_cfn"
             - "install_wordpress"
-            - "config_aa"
+            - "config_wordpress"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -100,31 +99,40 @@ Resources:
                 ensureRunning: "true"
                 files:
                   - "/etc/cfn/cfn-hup.conf"
-                  - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"        
-        config_aa:
-          commands:
-            01_clone_config:
-              cwd: "/etc/dovecot/conf.d"
-              test: "test ! -e /etc/dovecot/conf.d/10-auth.conf"
-              command: "echo 'disable_plaintext_auth = no' >> 10-auth.conf"
-            02_change_mailbox_location:
-              cwd: "/etc/dovecot/conf.d"
-              command: !Sub |
-                echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
+                  - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
         install_wordpress:
           packages:
             yum:
-              dovecot: []
-              postfix: []
-              mailx: []
-              telnet: []
-              mutt: []
+              httpd: []
+              php: []
+              mysql: []
+              php-mysql: []
+          sources:
+            /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
             sysvinit:
-              dovecot:
+              httpd:
                 enabled: "true"
                 ensureRunning: "true"
-              postfix:
-                enabled: "true"
-                ensureRunning: "true"
-
+        config_wordpress:
+          commands:
+            01_clone_config:
+              cwd: "/var/www/html/wordpress"
+              test: "test ! -e /var/www/html/wordpress/wp-config.php"
+              command: "cp wp-config-sample.php wp-config.php"
+            02_inject_dbhost:
+              cwd: "/var/www/html/wordpress"
+              command: !Sub |
+                sed -i 's/localhost/aa/g' wp-config.php
+            03_inject_dbname:
+              cwd: "/var/www/html/wordpress"
+              command: !Sub |
+                sed -i 's/database_name_here/aa/g' wp-config.php
+            04_inject_dbuser:
+              cwd: "/var/www/html/wordpress"
+              command: !Sub |
+                sed -i 's/username_here/aa/g' wp-config.php
+            05_inject_dbpassword:
+              cwd: "/var/www/html/wordpress"
+              command: !Sub |
+                sed -i 's/password_here/aa/g' wp-config.php
