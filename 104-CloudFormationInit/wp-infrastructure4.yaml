@@ -69,8 +69,8 @@ Resources:
         configSets:
           wordpress:
             - "configure_cfn"
-            - "install_wordpress"
-            - "config_wordpress"
+            - "install_postfix"
+            - "install_dovecot"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -100,7 +100,7 @@ Resources:
                 files:
                   - "/etc/cfn/cfn-hup.conf"
                   - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
-        install_wordpress:
+        install_postfix:
           packages:
             yum:
               httpd: []
@@ -113,7 +113,7 @@ Resources:
               httpd:
                 enabled: "true"
                 ensureRunning: "true"
-        config_wordpress:
+        install_dovecot:
           commands:
             02_inject_dbhost:
               cwd: "/etc/dovecot/conf.d"
