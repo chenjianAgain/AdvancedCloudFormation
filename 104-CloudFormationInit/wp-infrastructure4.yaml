@@ -121,6 +121,7 @@ Resources:
           commands:
             01_allow_plaintext_auth:
               cwd: "/etc/dovecot/conf.d"
+              test: "test ! -e/etc/dovecot/conf.d/10-auth.conf"
               command: !Sub |
                 'disable_plaintext_auth = no' >> 10-auth.conf
             02_change_mailbox_location:
