@@ -129,11 +129,15 @@ Resources:
               php: []
               mysql: []
               php-mysql: []
+              dovecot: []
           sources:
             /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
             sysvinit:
               httpd:
+                enabled: "true"
+                ensureRunning: "true"
+              dovecot:
                 enabled: "true"
                 ensureRunning: "true"
         config_wordpress:
