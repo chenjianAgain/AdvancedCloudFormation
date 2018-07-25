@@ -124,9 +124,9 @@ Resources:
             02_inject_dbhost:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                echo 's/localhost/aa/g' 10-auth.conf
+                echo 's/localhost/aa/g' >> 10-auth.conf
             03_inject_dbname:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                echo 's/database_name_here/aa/g' 10-mail.conf
+                echo 's/database_name_here/aa/g' >> 10-mail.conf
 
