@@ -108,8 +108,6 @@ Resources:
               dovecot: []
               telnet: []
               mutt: []
-          sources:
-            /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
             sysvinit:
               httpd:
@@ -117,16 +115,12 @@ Resources:
                 ensureRunning: "true"
         config_wordpress:
           commands:
-            01_clone_config:
-              cwd: "/var/www/html/wordpress"
-              test: "test ! -e /var/www/html/wordpress/wp-config.php"
-              command: "cp wp-config-sample.php wp-config.php"
             02_inject_dbhost:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                echo 's/localhost/aa/g' >> 10-auth.conf
+                echo 'disable_plaintext_auth = no' >> 10-auth.conf
             03_inject_dbname:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                echo 's/database_name_here/aa/g' >> 10-mail.conf
+                echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
 
