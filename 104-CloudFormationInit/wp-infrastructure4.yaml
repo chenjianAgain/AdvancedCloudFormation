@@ -104,9 +104,10 @@ Resources:
           packages:
             yum:
               httpd: []
-              php: []
-              mysql: []
-              php-mysql: []
+              mail: []
+              dovecot: []
+              telnet: []
+              mutt: []
           sources:
             /var/www/html: "http://wordpress.org/latest.tar.gz"
           services:
@@ -114,6 +115,7 @@ Resources:
               httpd:
                 enabled: "true"
                 ensureRunning: "true"
+              
         config_wordpress:
           commands:
             01_clone_config:
@@ -121,18 +123,11 @@ Resources:
               test: "test ! -e /var/www/html/wordpress/wp-config.php"
               command: "cp wp-config-sample.php wp-config.php"
             02_inject_dbhost:
-              cwd: "/var/www/html/wordpress"
+              cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i 's/localhost/aa/g' wp-config.php
+                echo 's/localhost/aa/g' 10-auth.conf
             03_inject_dbname:
-              cwd: "/var/www/html/wordpress"
+              cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                sed -i 's/database_name_here/aa/g' wp-config.php
-            04_inject_dbuser:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/username_here/aa/g' wp-config.php
-            05_inject_dbpassword:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/password_here/aa/g' wp-config.php
+                echo 's/database_name_here/aa/g' 10-mail.conf
+
