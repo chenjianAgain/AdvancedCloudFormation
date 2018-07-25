@@ -106,6 +106,9 @@ Resources:
             yum:
               dovecot: []
               postfix: []
+              mailx: []
+              telnet: []
+              mutt: []
           services:
             sysvinit:
               dovecot:
