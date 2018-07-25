@@ -105,7 +105,6 @@ Resources:
             yum:
               postfix: []
               mailx: []
-              dovecot: []
               telnet: []
               mutt: []
           services:
@@ -114,12 +113,20 @@ Resources:
                 enabled: "true"
                 ensureRunning: "true"
         install_dovecot:
+          packages:
+            yum:
+              dovecot: []
+          services:
+            sysvinit:
+              dovecot:
+                enabled: "true"
+                ensureRunning: "true"
           commands:
-            02_inject_dbhost:
+            01_allow_plaintext_auth:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 echo 'disable_plaintext_auth = no' >> 10-auth.conf
-            03_inject_dbname:
+            02_change_mail_location:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
                 echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
