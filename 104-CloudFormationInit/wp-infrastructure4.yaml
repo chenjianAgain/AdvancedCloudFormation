@@ -123,8 +123,8 @@ Resources:
               cwd: "/etc/dovecot/conf.d"
               test: "test ! -e /etc/dovecot/conf.d/10-auth.conf"
               command: !Sub |
-                'disable_plaintext_auth = no' >> 10-auth.conf
+                echo 'disable_plaintext_auth = no' >> 10-auth.conf
             02_change_mailbox_location:
               cwd: "/etc/dovecot/conf.d"
               command: !Sub |
-                'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
+                echo 'mail_location = mbox:~/mail:INBOX=/var/mail/%u' >> 10-mail.conf
