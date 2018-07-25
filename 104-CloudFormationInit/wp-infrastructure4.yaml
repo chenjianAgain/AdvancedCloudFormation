@@ -7,19 +7,7 @@ Parameters:
       - MEDIUM
       - LARGE
     Description: Select Environment Size (S,M,L)
-  DatabaseName:
-    Type: String
-    Default: wordpress
-  DatabaseUser:
-    Type: String
-    Default: wordpress
-  DatabasePassword:
-    Type: String
-    Default: w0rdpr355
-    NoEcho: true
-  TestString:
-    Type: String
-    Default: test9
+  
 Mappings:
   RegionMap:
     us-east-1:
@@ -61,16 +49,7 @@ Mappings:
       "EC2" : "t2.medium"
       "DB" : "db.t2.medium"
 Resources:
-  DB:
-    Type: "AWS::RDS::DBInstance"
-    Properties:
-      AllocatedStorage: 5
-      StorageType: gp2
-      DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB] # Dynamic mapping + Pseudo Parameter
-      DBName: !Ref DatabaseName
-      Engine: MySQL
-      MasterUsername: !Ref DatabaseUser
-      MasterUserPassword: !Ref DatabasePassword
+ 
   EC2:
     Type: "AWS::EC2::Instance"
     Properties:
@@ -92,7 +71,7 @@ Resources:
           wordpress:
             - "configure_cfn"
             - "install_wordpress"
-            - "config_wordpress"
+            # - "config_wordpress"
         configure_cfn:
           files:
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
@@ -127,42 +106,14 @@ Resources:
         install_wordpress:
           packages:
             yum:
-              httpd: []
-              php: []
-              mysql: []
-              php-mysql: []
               dovecot: []
-          sources:
-            /var/www/html: "http://wordpress.org/latest.tar.gz"
+              postfix: []
           services:
             sysvinit:
-              httpd:
-                enabled: "true"
-                ensureRunning: "true"
               dovecot:
                 enabled: "true"
                 ensureRunning: "true"
-        config_wordpress:
-          commands:
-            01_clone_config:
-              cwd: "/var/www/html/wordpress"
-              test: "test ! -e /var/www/html/wordpress/wp-config.php"
-              command: "cp wp-config-sample.php wp-config.php"
-            02_inject_dbhost:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/localhost/${DB.Endpoint.Address}/g' wp-config.php
-            03_inject_dbname:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/database_name_here/${DatabaseName}/g' wp-config.php
-            04_inject_dbuser:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/username_here/${DatabaseUser}/g' wp-config.php
-            05_inject_dbpassword:
-              cwd: "/var/www/html/wordpress"
-              command: !Sub |
-                sed -i 's/password_here/${DatabasePassword}/g' wp-config.php
-  S3:
-    Type: "AWS::S3::Bucket"
+              postfix:
+                enabled: "true"
+                ensureRunning: "true"
+
